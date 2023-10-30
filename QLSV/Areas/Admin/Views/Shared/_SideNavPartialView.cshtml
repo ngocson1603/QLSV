@@ -1,0 +1,142 @@
+﻿<div class="side-nav">
+    <div class="side-nav-inner">
+        <ul class="side-nav-menu scrollable">
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="dropdown-toggle" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-dashboard"></i>
+                        </span>
+                        <span class="title">Dashboard</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+
+                </li>
+                <li class="nav-item">
+                    <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">Product Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-area="Admin" asp-controller="AdminGiaoViens" asp-action="Index">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">QLGV</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-table"></i>
+                        </span>
+                        <span class="title">System Management</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-area="Admin" asp-controller="Admin" asp-action="Index">Dev account management</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-table"></i>
+                        </span>
+                        <span class="title">Diem</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index">Diem</a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="ViewProductSaleInDate">Diem Học Sinh</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-toggle" asp-action="Index" asp-controller="AdminTinDangs" asp-area="Admin">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">Blog Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-toggle" asp-action="Index" asp-controller="AdminHocSinhs" asp-area="Admin">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">QLSV</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="dropdown-toggle" asp-action="Index" asp-controller="AdminKhoaHocs" asp-area="Admin">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-file"></i>
+                        </span>
+                        <span class="title">QL khóa học</span>
+                    </a>
+                </li>
+            }
+            else if (User.IsInRole("Dev"))
+            {
+                @*<li class="nav-item">
+                <a asp-area="Admin" asp-controller="Dev" asp-action="Index">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-file"></i>
+                    </span>
+                    <span class="title">Game waiting for approval</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Admin" asp-controller="Dev" asp-action="IndexDev">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-file"></i>
+                    </span>
+                    <span class="title">Approved games</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-area="Admin" asp-controller="DevItem" asp-action="Index">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-file"></i>
+                    </span>
+                    <span class="title">Game items</span>
+                </a>
+            </li>*@
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-table"></i>
+                        </span>
+                        <span class="title">Diem</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index">Diem</a>
+                        </li>
+                        <li>
+                            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="ViewProductSaleInDate">Diem Học Sinh</a>
+                        </li>
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

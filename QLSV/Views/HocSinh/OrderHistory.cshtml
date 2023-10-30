@@ -1,0 +1,37 @@
+﻿@model IEnumerable<QLSV.Models.DiemHocSinh>
+
+@{
+    ViewData["Title"] = "Diem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <table style="width: 80%; margin: 0 auto; border-collapse: collapse; border: 1px solid #000;">
+        <thead style="background-color: #f0f0f0;">
+            <tr>
+                <th style="padding: 10px; border: 1px solid #000;">ID Hoc Sinh</th>
+                <th style="padding: 10px; border: 1px solid #000;">ID Khoa Hoc</th>
+                <th style="padding: 10px; border: 1px solid #000;">So Diem</th>
+                <th style="padding: 10px; border: 1px solid #000;">Nhan Xet</th>
+                <th style="padding: 10px; border: 1px solid #000;">So Lan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var diem in Model)
+            {
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #000;">@diem.IdHocSinh</td>
+                    <td style="padding: 10px; border: 1px solid #000;">@diem.IdKhoaHoc</td>
+                    <td style="padding: 10px; border: 1px solid #000;">@diem.SoDiem</td>
+                    <td style="padding: 10px; border: 1px solid #000;">@diem.NhanXet</td>
+                    <td style="padding: 10px; border: 1px solid #000;">@diem.SoLan</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+
