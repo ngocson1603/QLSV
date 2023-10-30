@@ -7,101 +7,165 @@
 
 @{
 }
-<div class="nk-main">
-    <div class="nk-gap-1"></div>
+
+<section class="breadcrumb breadcrumb-img">
     <div class="container">
-        <ul style="color:white" class="nk-breadcrumbs">
-
-
-            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-
-
-            <li><span class="fa fa-angle-right"></span></li>
-
-            <li><a href="#">Blog</a></li>
-
-
-            <li><span class="fa fa-angle-right"></span></li>
-
-            <li><span>@Model.Title</span></li>
-
-        </ul>
-    </div>
-    <div class="nk-gap-1"></div>
-    <div class="container">
-        <div class="row vertical-gap">
-            <div class="col-lg-12">
-                <!-- START: Post -->
-                <div class="nk-blog-post nk-blog-post-single">
-                    <!-- START: Post Text -->
-                    <div class="nk-post-text mt-0">
-                        <div class="nk-post-img">
-                            <img src="~/Images/news/@Url.Content(Model.Image)" alt="@Model.Title">
-                        </div>
-                        <div class="nk-gap-1"></div>
-                        <h1 style="color:white" class="nk-post-title h4">@Model.Title</h1>
-                        <div class="nk-post-by">
-                            <img src="~/assets/images/avatar-2.jpg" alt="Witch Murder" class="rounded-circle" width="35"> by <a href="#">@Model.Name</a> @Model.CreatedDate
-
-
-                            <div class="nk-post-categories">
-
-                                <span class="bg-main-1">Action</span>
-
-                                <span class="bg-main-2">Adventure</span>
-
-                            </div>
-
-                        </div>
-                        <div class="nk-gap"></div>
-                        <p style="color: whitesmoke" class="h3">@Model.TContent</p>
-                        <p>@Html.Raw(Model.Contents)</p>
-                        <div class="nk-gap"></div>
-                        <div class="nk-post-share">
-                            <span class="h5">Share Article:</span>
-
-                            <ul class="nk-social-links-2">
-                                <li><span class="nk-social-facebook" title="Share page on Facebook" data-share="facebook"><span class="fab fa-facebook"></span></span></li>
-                                <li><span class="nk-social-google-plus" title="Share page on Google+" data-share="google-plus"><span class="fab fa-google-plus"></span></span></li>
-                                <li><span class="nk-social-twitter" title="Share page on Twitter" data-share="twitter"><span class="fab fa-twitter"></span></span></li>
-                                <li><span class="nk-social-pinterest" title="Share page on Pinterest" data-share="pinterest"><span class="fab fa-pinterest-p"></span></span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- END: Post Text -->
-                    <!-- START: Similar Articles -->
-                    <div class="nk-gap-2"></div>
-                    <h3 class="nk-decorated-h-2"><span><span class="text-main-1">Similar</span> Articles</span></h3>
-                    <div class="nk-gap"></div>
-                    <div class="row">
-                        @if (Baivietlienquan != null && Baivietlienquan.Count() > 0)
-                        {
-                            foreach (var item in Baivietlienquan)
-                            {
-                                string _url = $"/tin-tuc/{item.Alias}-{item.Id}.html";
-                                <div class="col-md-4">
-                                    <!-- START: Post -->
-                                    <div class="nk-blog-post">
-                                        <a href="@_url" class="nk-post-img">
-                                            <img src="~/Images/news/@Url.Content(Model.Image)" alt="@item.Title">
-
-                                            <span class="nk-post-categories">
-                                                <span class="bg-main-2">Adventure</span>
-                                            </span>
-
-                                        </a>
-                                        <div class="nk-gap"></div>
-                                        <h2 class="nk-post-title h4" style="color:white"><a href="@_url">@item.Title</a></h2>
-                                    </div>
-                                    <!-- END: Post -->
-                                </div>
-                            }
-                        }
-                    </div>
-                    <!-- END: Similar Articles -->
-                </div>
-                <!-- END: Post -->
+        <div class="row">
+            <div class="col">
+                <h1>News Single</h1>
+                <ul>
+                    <li><a href="index-2.html">Home</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li>News Single</li>
+                </ul>
             </div>
         </div>
     </div>
-</div>
+</section>
+<!--========================================================
+                      NEWS
+=========================================================-->
+<section class="news-single pt60 pb50">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="font-weight-bold">
+                    Published on <span class="c-yellow">27 Mar 2021</span>
+                </div>
+                <h1>
+                    @Model.Title
+                </h1>
+                <p>
+                    @Model.TContent
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="news-item-img mtb50">
+        <img src="~/Images/news/@Url.Content(Model.Image)" alt="@Model.Title">
+        <i data-src="https://www.youtube.com/watch?v=9xwazD5SyVg" data-fancybox class="fas fa-play"></i>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+               <p>
+                   @Html.Raw(Model.Contents)
+               </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt30 mb10">
+                <div class="curriculum-quote bxw"
+                     style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInUp;">
+                    <h3>
+                        Since 2000, we've been partnering with education leaders to <a href="#">
+                            increase equity and
+                            achievement
+                        </a> for all students.
+                    </h3>
+                    <a href="#" class="link2">Learn More About Experience Coaching <i class="ti-angle-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h2>Explore Special Education Programs</h2>
+                <p class="mtb30">
+                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
+                    classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor
+                    at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a
+                    Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the
+                    undoubtable source.
+                </p>
+
+                <p>
+                    Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of
+                    Good and Evil) by Cicero, written
+                    in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first
+                    line of Lorem Ipsum, "Lorem ipsum
+                    dolor sit amet..", comes from a line in section 1.10.32.
+                </p>
+            </div>
+            <div class="col-md-12 mt80 wow fadeInUp" data-wow-delay=".3s">
+                <h2>Related Articles</h2>
+                <div class="news-carousel owl-carousel owl-theme mt40">
+                    <div class="news-item bxw">
+                        <div class="news-item-img">
+                            <img src="~/assetions/img/news1.jpg" alt="">
+                            <i data-src="https://www.youtube.com/watch?v=9xwazD5SyVg" data-fancybox class="fas fa-play"></i>
+                        </div>
+                        <div class="news-item-content">
+                            <span>April 28, 2019</span>
+                            <a href="#">
+                                <h3>
+                                    Peer pressure changes how
+                                    teens tackle inequality
+                                </h3>
+                            </a>
+                            <hr>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
+                                industry's standard text.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="news-item bxw">
+                        <div class="news-item-img">
+                            <img src="~/assetions/img/news2.jpg" alt="">
+                        </div>
+                        <div class="news-item-content">
+                            <span>April 28, 2019</span>
+                            <a href="#">
+                                <h3>
+                                    New project digs deep into
+                                    publishing diversity
+                                </h3>
+                            </a>
+                            <hr>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
+                                industry's standard text.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="news-item bxw">
+                        <div class="news-item-img">
+                            <img src="~/assetions/img/news3.jpg" alt="">
+                        </div>
+                        <div class="news-item-content">
+                            <span>April 28, 2019</span>
+                            <a href="#">
+                                <h3>
+                                    New project digs deep into
+                                    publishing diversity
+                                </h3>
+                            </a>
+                            <hr>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
+                                industry's standard text.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="news-item bxw">
+                        <div class="news-item-img">
+                            <img src="~/assetions/img/news4.jpg" alt="">
+                        </div>
+                        <div class="news-item-content">
+                            <span>April 28, 2019</span>
+                            <a href="#">
+                                <h3>
+                                    New project digs deep into
+                                    publishing diversity
+                                </h3>
+                            </a>
+                            <hr>
+                            <p>
+                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
+                                industry's standard text.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

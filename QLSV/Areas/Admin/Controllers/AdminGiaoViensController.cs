@@ -135,7 +135,20 @@ namespace QLSV.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        public IActionResult LogoutDev()
+        {
+            try
+            {
+                HttpContext.SignOutAsync();
+                HttpContext.Session.Remove("AccountId");
+                HttpContext.Session.Remove("Role");
+                return RedirectToAction("LoginDev", "AdminGiaoViens", new { Area = "Admin" });
+            }
+            catch
+            {
+                return RedirectToAction("LoginDev", "AdminGiaoViens", new { Area = "Admin" });
+            }
+        }
         // GET: Admin/AdminGiaoViens/Delete/5
         public IActionResult Delete(int? id)
         {
@@ -184,7 +197,7 @@ namespace QLSV.Areas.Admin.Controllers
                     return View(khachhang);
                 }
             }
-            return RedirectToAction("LoginDev", "Dev", new { Area = "Admin" });
+            return RedirectToAction("LoginDev", "AdminGiaoViens", new { Area = "Admin" });
         }
 
         [AllowAnonymous]
