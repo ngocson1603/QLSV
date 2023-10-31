@@ -24,6 +24,7 @@ namespace QLSV
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
             modelBuilder.ApplyConfiguration(new FundConfiguration());
             modelBuilder.ApplyConfiguration(new BlogConfigurationcs());
+            modelBuilder.ApplyConfiguration(new LichHocConfiguration());
             modelBuilder.ApplyConfiguration(new AddFundTransactionConfiguration());
             modelBuilder.Entity<OrderDetail>().Property(e => e.Price).HasPrecision(18, 2);
             modelBuilder.Entity<HocSinh>().Property(e => e.Balance).HasPrecision(18, 2);
@@ -39,5 +40,6 @@ namespace QLSV
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Refund> Refunds { get; set; }
+        public DbSet<LichHoc> LichHocs { get; set; }
     }
 }

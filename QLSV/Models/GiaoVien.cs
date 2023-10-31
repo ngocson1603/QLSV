@@ -13,5 +13,6 @@ namespace QLSV.Models
         public int? IdKhoaHoc { get; set; }
         public DateTime date_of_birth { get; set; }
         public KhoaHoc KhoaHoc { get; set; }
+        public List<LichHoc> LichHocs { get; set; }
     }
 }

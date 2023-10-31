@@ -28,22 +28,19 @@ namespace QLSV.Repositories
             var request = Context.Database.GetDbConnection().QuerySingle<OtpModels.RefundRequest>(query, parameter);
             return request;
         }
-      //  public List<gameRefund> listgameRefund(int userid)
-      //  {
-      //      var query = @"select l.ProductId,Name,Image from 
-      //                  Product p,DiemHocSinh l,
-						//(select ProductID,UserID,MAX(DatePurchase) as latestDate from 
-      //                  [Order] o,OrderDetail od
-      //                  where o.Id=od.Id and UserID=@userid
-      //                  group by ProductID,UserID)
-
-						//as tmp
-      //                  where p.Id=tmp.ProductID and p.Id=l.ProductId and DATEDIFF(day,tmp.latestDate,GETDATE())<=7";
-      //      var parameter = new DynamicParameters();
-      //      parameter.Add("userid", userid);
-      //      var result=Context.Database.GetDbConnection().Query<gameRefund>(query, parameter);
-      //      return result.ToList();
-      //  }
+        public List<KhoaHoc> listgameRefund(int userid)
+        {
+            var query = @"SELECT KhoaHoc.*
+FROM HocSinh
+INNER JOIN [Order] ON HocSinh.Id = [Order].UserID
+INNER JOIN OrderDetail ON [Order].Id = OrderDetail.Id
+INNER JOIN KhoaHoc ON OrderDetail.ProductID = KhoaHoc.Id
+WHERE [Order].DatePurchase >= DATEADD(day, -10, GETDATE()) and HocSinh.Id = @userid";
+            var parameter = new DynamicParameters();
+            parameter.Add("userid", userid);
+            var result = Context.Database.GetDbConnection().Query<KhoaHoc>(query, parameter);
+            return result.ToList();
+        }
         public List<RefundUser> GetRefundHocSinh()
         {
             var query = @"select Id,UserID,Price from Refund where DATEDIFF(day,datecreate,getdate())=7 and Status=0";

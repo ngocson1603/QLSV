@@ -14,8 +14,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace QLSV.Controllers
+namespace QLSV.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize]
     public class HocSinhController : Controller
     {
@@ -52,9 +53,28 @@ namespace QLSV.Controllers
                 }
             }
 
-            return RedirectToAction("Homepage", "Product");
+            return RedirectToAction("Login", "HocSinh", new { Area = "Admin" });
         }
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var KhoaHoc = _unitOfWork.KhoaHocRepository.GetById((int)id);
+            if (KhoaHoc == null)
+            {
+                return NotFound();
+            }
+
+            return View(KhoaHoc);
+        }
+        public ActionResult Index()
+        {
+            var sale = _unitOfWork.KhoaHocRepository.GetAll();
+            return View(sale);
+        }
         [Route("diem.html", Name = "OrderHistory")]
         public IActionResult OrderHistory()
         {
@@ -66,7 +86,7 @@ namespace QLSV.Controllers
                     .ToList();
                 return View(lsDonHang);
             }
-            return RedirectToAction("Index", "Product");
+            return RedirectToAction("Login", "HocSinh", new { Area = "Admin" });
         }
         [HttpGet]
         [AllowAnonymous]
@@ -124,9 +144,9 @@ namespace QLSV.Controllers
                 int userid = int.Parse(taikhoanID);
                 try
                 {
-                    Models.Refund refundrequest = _service.RefundService.refund(userid, productID);
+                    Refund refundrequest = _service.RefundService.refund(userid, productID);
                     _unitOfWork.RefundRepository.Create(refundrequest);
-                    _unitOfWork.SaveChange();
+                    _unitOfWork.SaveChange();   
                     _notyfService.Success("Successfully");
                     return RedirectToAction(nameof(DiemHocSinh));
                 }
@@ -147,7 +167,7 @@ namespace QLSV.Controllers
             var taikhoanID = HttpContext.Session.GetString("CustomerId");
             if (taikhoanID != null)
             {
-                return RedirectToAction("Dashboard", "HocSinh");
+                return RedirectToAction("Dashboard", "HocSinh", new { Area = "Admin" });
             }
             return View();
         }
@@ -226,7 +246,7 @@ namespace QLSV.Controllers
             if (!ModelState.IsValid)
             {
                 _notyfService.Warning("Please check your information and try again");
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { Area = "Admin" });
             }
 
             int kq = _service.HocSinhService.SignIn(customer);
@@ -268,15 +288,15 @@ namespace QLSV.Controllers
                 if (carts != null)
                 {
                     HttpContext.Session.Remove("_GioHang");
-                    HttpContext.Session.Set<List<Cart>>("_GioHang", carts);
-                }    
+                    HttpContext.Session.Set("_GioHang", carts);
+                }
 
                 _notyfService.Success($"Welcome back, {user.HoTen}!");
 
                 return RedirectToAction("Dashboard");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { Area = "Admin" });
         }
 
         [HttpGet]
@@ -284,7 +304,7 @@ namespace QLSV.Controllers
         {
             HttpContext.SignOutAsync();
             HttpContext.Session.Remove("CustomerId");
-            return RedirectToAction("Homepage", "Product");
+            return RedirectToAction("Login", "HocSinh", new { Area = "Admin" });
         }
 
         [HttpPost]
@@ -295,12 +315,12 @@ namespace QLSV.Controllers
                 var taikhoanID = HttpContext.Session.GetString("CustomerId");
                 if (taikhoanID == null)
                 {
-                    return RedirectToAction("Login", "HocSinh");
+                    return RedirectToAction("Login", "HocSinh", new { Area = "Admin" });
                 }
                 if (ModelState.IsValid)
                 {
                     var taikhoan = _unitOfWork.HocSinhRepository.GetById(Convert.ToInt32(taikhoanID));
-                    if (taikhoan == null) return RedirectToAction("Login", "HocSinh");
+                    if (taikhoan == null) return RedirectToAction("Login", "HocSinh", new { Area = "Admin" });
                     var pass = (model.PasswordNow.Trim() + taikhoan.Salt.Trim()).ToMD5();
                     {
                         string passnew = (model.Password.Trim() + taikhoan.Salt.Trim()).ToMD5();
@@ -308,17 +328,17 @@ namespace QLSV.Controllers
                         _unitOfWork.HocSinhRepository.Update(taikhoan);
                         _unitOfWork.SaveChange();
                         _notyfService.Success("Change password successfully");
-                        return RedirectToAction("Dashboard", "HocSinh");
+                        return RedirectToAction("Dashboard", "HocSinh", new { Area = "Admin" });
                     }
                 }
             }
             catch
             {
                 _notyfService.Success("Password change failed");
-                return RedirectToAction("Dashboard", "HocSinh");
+                return RedirectToAction("Dashboard", "HocSinh", new { Area = "Admin" });
             }
             _notyfService.Success("Password change failed");
-            return RedirectToAction("Dashboard", "HocSinh");
+            return RedirectToAction("Dashboard", "HocSinh", new { Area = "Admin" });
         }
 
         [Route("DiemHocSinh.html", Name = "DiemHocSinh")]
@@ -337,17 +357,17 @@ namespace QLSV.Controllers
             }
             return RedirectToAction("Login");
         }
-        //[Route("refund.html", Name = "Refund")]
-        //public IActionResult Refund()
-        //{
-        //    var taikhoanID = HttpContext.Session.GetString("CustomerId");
-        //    if (taikhoanID != null)
-        //    {
-        //        var proLib = _unitOfWork.RefundRepository.listgameRefund(int.Parse(taikhoanID));
-        //        return View(proLib);
-        //    }
-        //    return RedirectToAction("Login");
-        //}
+        [Route("refund.html", Name = "Refund")]
+        public IActionResult Refund()
+        {
+            var taikhoanID = HttpContext.Session.GetString("CustomerId");
+            if (taikhoanID != null)
+            {
+                var proLib = _unitOfWork.RefundRepository.listgameRefund(int.Parse(taikhoanID));
+                return View(proLib);
+            }
+            return RedirectToAction("Login");
+        }
 
     }
 }

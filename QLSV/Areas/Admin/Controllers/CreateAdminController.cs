@@ -165,7 +165,7 @@
 //            return RedirectToAction("AdminLogin", "Admin", new { Area = "Admin" });
 //        }
 //        [AllowAnonymous]
-//        [Route("login.html", Name = "Login")]
+//        [Route("LoginHocSinh.html", Name = "LoginHocSinh")]
 //        public IActionResult AdminLogin(string returnUrl = null)
 //        {
 //            var taikhoanID = HttpContext.Session.GetString("AccountId");
@@ -175,7 +175,7 @@
 //        }
 //        [HttpPost]
 //        [AllowAnonymous]
-//        [Route("login.html", Name = "Login")]
+//        [Route("LoginHocSinh.html", Name = "LoginHocSinh")]
 //        public async Task<IActionResult> AdminLogin(LoginViewModel model, string returnUrl = null)
 //        {
 //            try

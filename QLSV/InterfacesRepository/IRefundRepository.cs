@@ -7,7 +7,7 @@ namespace QLSV.Interfaces
     public interface IRefundRepository:IGameStoreRepository<Refund>
     {
         OtpModels.RefundRequest refundRequest(int UserID, int productID);
-        //List<gameRefund> listgameRefund(int userid);
+        List<KhoaHoc> listgameRefund(int userid);
         List<RefundUser> GetRefundHocSinh();
     }
 }

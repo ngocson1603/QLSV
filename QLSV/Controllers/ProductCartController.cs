@@ -157,7 +157,7 @@ namespace DuAnGame.Controllers
                     sendemail(maKH.Gmail, cart, madh);
                     HttpContext.Session.Remove("_GioHang");
                     _notyfService.Success("Success");
-                    return RedirectToAction("Index", "Product");
+                    return RedirectToAction("Index", "Home", new { Area = "Admin" });
                 }
                 catch (Exception ex)
                 {
