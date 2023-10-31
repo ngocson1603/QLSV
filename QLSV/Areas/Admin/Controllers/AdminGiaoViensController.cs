@@ -17,6 +17,8 @@ using PayPalCheckoutSdk.Orders;
 using QLSV.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using QLSV.ModelViews;
 
 namespace QLSV.Areas.Admin.Controllers
 {
@@ -27,7 +29,8 @@ namespace QLSV.Areas.Admin.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly GameStoreDbContext _context;
         public INotyfService _notyfService { get; }
-        public AdminGiaoViensController(IUnitOfWork unitOfWork, INotyfService notyfService,GameStoreDbContext context)
+
+        public AdminGiaoViensController(IUnitOfWork unitOfWork, INotyfService notyfService, GameStoreDbContext context)
         {
             _unitOfWork = unitOfWork;
             _notyfService = notyfService;
@@ -135,6 +138,40 @@ namespace QLSV.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditInfoDev([Bind("Id,full_name,email,password,phone_number,address,IdKhoaHoc,date_of_birth")] GiaoVien giaovien)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var gv = _context.GiaoViens.Find(giaovien.Id);
+
+                    gv.full_name = giaovien.full_name;
+                    gv.email = giaovien.email;
+                    gv.phone_number = giaovien.phone_number;
+                    gv.address = giaovien.address;
+                    gv.date_of_birth = giaovien.date_of_birth;
+
+                    _context.GiaoViens.Update(gv);
+                    _context.SaveChanges();
+                    _notyfService.Success("Update Success");
+                    return RedirectToAction(nameof(InfoDev));
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                _notyfService.Error("Error");
+                return RedirectToAction(nameof(InfoDev));
+            }
+        }
+
         public IActionResult LogoutDev()
         {
             try
@@ -149,6 +186,7 @@ namespace QLSV.Areas.Admin.Controllers
                 return RedirectToAction("LoginDev", "AdminGiaoViens", new { Area = "Admin" });
             }
         }
+
         // GET: Admin/AdminGiaoViens/Delete/5
         public IActionResult Delete(int? id)
         {
@@ -164,6 +202,23 @@ namespace QLSV.Areas.Admin.Controllers
             }
 
             return View(GiaoVien);
+        }
+
+        public IActionResult GetStudents()
+        {
+            var taikhoanID = HttpContext.Session.GetString("AccountId");
+            if (taikhoanID != null)
+            {
+                var khachhang = _unitOfWork.GiaoVienRepository.GetById(int.Parse(taikhoanID));
+                if (khachhang != null)
+                {
+                    var hocsinhs = _context.DiemHocSinhs.Where(x => x.IdKhoaHoc == khachhang.IdKhoaHoc)
+                        .Include(x => x.HocSinh)
+                        .Select(x => x.HocSinh).ToList();
+                    return View("StudentList", hocsinhs);
+                }
+            }
+            return RedirectToAction("LoginDev", "AdminGiaoViens", new { Area = "Admin" });
         }
 
         // POST: Admin/AdminGiaoViens/Delete/5
@@ -183,8 +238,8 @@ namespace QLSV.Areas.Admin.Controllers
             {
                 throw;
             }
-            
         }
+
         [Route("tai-khoan-dev.html", Name = "InfoDev")]
         public IActionResult InfoDev()
         {
@@ -194,6 +249,7 @@ namespace QLSV.Areas.Admin.Controllers
                 var khachhang = _unitOfWork.GiaoVienRepository.GetById(int.Parse(taikhoanID));
                 if (khachhang != null)
                 {
+                    ViewBag.khoahoc = _unitOfWork.KhoaHocRepository.GetById(khachhang.IdKhoaHoc.Value)?.course_name;
                     return View(khachhang);
                 }
             }
@@ -209,6 +265,7 @@ namespace QLSV.Areas.Admin.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
         [HttpPost]
         [AllowAnonymous]
         [Route("logindev.html", Name = "Logindev")]
@@ -216,57 +273,80 @@ namespace QLSV.Areas.Admin.Controllers
         {
             try
             {
-                    if (User.IsInRole("User"))
-                    {
-                        _notyfService.Warning("Please log out at User");
-                        return RedirectToAction("Dashboard", "Users");
-                    }
-                    var kh = _unitOfWork.GiaoVienRepository.getDev(model.UserName);
+                if (User.IsInRole("User"))
+                {
+                    _notyfService.Warning("Please log out at User");
+                    return RedirectToAction("Dashboard", "Users");
+                }
+                var kh = _unitOfWork.GiaoVienRepository.getDev(model.UserName);
 
-                    if (kh == null)
-                    {
-                        ViewBag.Eror = "Login information is incorrect";
-                        return View(model);
-                    }
-                    string pass = (model.Password.Trim());
-                    // + kh.Salt.Trim()
-                    if (kh.password.Trim() != pass)
-                    {
-                        ViewBag.Eror = "Login information is incorrect";
-                        return View(model);
-                    }
-                    //đăng nhập thành công
+                if (kh == null)
+                {
+                    ViewBag.Eror = "Login information is incorrect";
+                    return View(model);
+                }
+                string pass = (model.Password.Trim());
+                // + kh.Salt.Trim()
+                if (kh.password.Trim() != pass)
+                {
+                    ViewBag.Eror = "Login information is incorrect";
+                    return View(model);
+                }
+                //đăng nhập thành công
 
-
-                    var taikhoanID = HttpContext.Session.GetString("AccountId");
-                    //identity
-                    //luuw seccion Makh
-                    HttpContext.Session.SetString("AccountId", kh.Id.ToString());
-                    HttpContext.Session.SetString("Role", "Dev");
-                    var Roles = HttpContext.Session.GetString("Role");
-                    //identity
-                    var userClaims = new List<Claim>
+                var taikhoanID = HttpContext.Session.GetString("AccountId");
+                //identity
+                //luuw seccion Makh
+                HttpContext.Session.SetString("AccountId", kh.Id.ToString());
+                HttpContext.Session.SetString("Role", "Dev");
+                var Roles = HttpContext.Session.GetString("Role");
+                //identity
+                var userClaims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Name, kh.full_name),
                             new Claim(ClaimTypes.Email, kh.email),
                             new Claim("AccountId", kh.Id.ToString()),
                             new Claim(ClaimTypes.Role, Roles)
                         };
-                    var grandmaIdentity = new ClaimsIdentity(userClaims, "Dev Identity");
-                    var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
-                    await HttpContext.SignInAsync(userPrincipal);
+                var grandmaIdentity = new ClaimsIdentity(userClaims, "Dev Identity");
+                var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
+                await HttpContext.SignInAsync(userPrincipal);
 
-
-
-                    return RedirectToAction("Index", "Home", new { Area = "Admin" });
-                
+                return RedirectToAction("Index", "Home", new { Area = "Admin" });
             }
             catch
             {
                 return RedirectToAction("LoginDev", "Dev", new { Area = "Admin" });
             }
-            return RedirectToAction("LoginDev", "Dev", new { Area = "Admin" });
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            if(model.Password != model.ConfirmPassword)
+            {
+                _notyfService.Error("Mật khẩu không khớp");
+                return RedirectToAction("InfoDev");
+            }
+            var taikhoanID = HttpContext.Session.GetString("AccountId");
+            if (taikhoanID != null)
+            {
+                var khachhang = _unitOfWork.GiaoVienRepository.GetById(int.Parse(taikhoanID));
+                if (khachhang != null && khachhang.password == model.PasswordNow)
+                {
+                    khachhang.password = model.Password;
+
+                    _context.GiaoViens.Update(khachhang);
+                    _context.SaveChanges();
+                }else
+                {
+                    _notyfService.Error("Mật khẩu hiện tại không đúng");
+                    return RedirectToAction("InfoDev");
+                }
+            }
+            _notyfService.Success("Cập nhật thành công");
+            return RedirectToAction("InfoDev");
+        }
     }
 }

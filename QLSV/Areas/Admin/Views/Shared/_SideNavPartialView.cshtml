@@ -93,48 +93,13 @@
             }
             else if (User.IsInRole("Dev"))
             {
-                @*<li class="nav-item">
-                <a asp-area="Admin" asp-controller="Dev" asp-action="Index">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-file"></i>
-                    </span>
-                    <span class="title">Game waiting for approval</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a asp-area="Admin" asp-controller="Dev" asp-action="IndexDev">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-file"></i>
-                    </span>
-                    <span class="title">Approved games</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a asp-area="Admin" asp-controller="DevItem" asp-action="Index">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-file"></i>
-                    </span>
-                    <span class="title">Game items</span>
-                </a>
-            </li>*@
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown d-flex">
                     <a class="dropdown-toggle" href="javascript:void(0);">
                         <span class="icon-holder">
                             <i class="anticon anticon-table"></i>
                         </span>
-                        <span class="title">Diem</span>
-                        <span class="arrow">
-                            <i class="arrow-icon"></i>
-                        </span>
                     </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index">Diem</a>
-                        </li>
-                        <li>
-                            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="ViewProductSaleInDate">Diem Học Sinh</a>
-                        </li>
-                    </ul>
+                    <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index">Khoá học</a>
                 </li>
             }
         </ul>

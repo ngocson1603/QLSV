@@ -1,4 +1,4 @@
-﻿@model IEnumerable<QLSV.Models.HocSinh>
+﻿@model IEnumerable<QLSV.Models.DiemHocSinh>
 
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
@@ -10,6 +10,8 @@
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Khoá học</a>
+            <span class="breadcrumb-item">@ViewBag?.khoahoc?.course_name</span>
         </nav>
     </div>
 </div>
@@ -22,9 +24,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>IdKhoaHoc</th>
-                        <th>SoDiem</th>
-                        <th>NhanXet</th>
+                        <th>Tên sinh viên</th>
+                        <th>Tên Khoá Học</th>
+                        <th>Số điểm</th>
+                        <th>Nhận xét</th>
                     </tr>
                 </thead>
                 <tbody id="records_table">
@@ -37,10 +40,13 @@
                                     @item.Id
                                 </td>
                                 <td>
-                                    @saleId
+                                    @item.HocSinh.HoTen
                                 </td>
-                                <td><input type="number" id="SoDiem-@item.Id" onchange="handleChange(this);" /></td>
-                                <td><input type="text" class="nhanxet-input" id="NhanXet-@item.Id" onchange="handleChange(this);" /></td>
+                                <td>
+                                    @item.KhoaHoc.course_name
+                                </td>
+                                <td><input value="@item.SoDiem" type="number" id="SoDiem-@item.Id" onchange="handleChange(this);" /></td>
+                                <td><input value="@item.NhanXet" type="text" class="nhanxet-input" id="NhanXet-@item.Id" onchange="handleChange(this);" /></td>
                             </tr>
                         }
                     }
@@ -69,15 +75,15 @@
             $.ajax({
                 success: function (res) {
                     Swal.fire({
-                        title: "<h5>Save Discount For Product(s)</h5>",
+                        title: "<h5>Lưu điểm và nhận xét cho sinh viên</h5>",
                         icon: 'question',
                         allowOutsideClick: false,
                         showCloseButton: true,
                         showDenyButton: true,
                         confirmButtonColor: '#3085d6',
                         denyButtonColor: '#3A833A',
-                        confirmButtonText: 'Continue Transaction',
-                        denyButtonText: 'New Transaction'
+                        confirmButtonText: 'Lưu',
+                        denyButtonText: 'Huỷ bỏ'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             var nhanxetInputs = document.getElementsByClassName('nhanxet-input');
@@ -89,9 +95,9 @@
                                 if (soDiemValue.length > 0) {
                                     $.ajax({
                                         type: "POST",
-                                        url: "/Sale/AjaxMethod",
+                                        url: "/Diem/AjaxMethod",
                                         data: {
-                                            "saleId": soDiemId.split('-')[1],
+                                            "diemId": soDiemId.split('-')[1],
                                             "productId": @saleId,
                                             "discount": soDiemValue,
                                             "nhanxet": nhanxetValue,
@@ -105,7 +111,7 @@
                             }
 
                             alert("Success");
-                            window.location.href = "/sale.html";
+                            window.location.href = "/Admin/AdminDiem/Edit/" + @saleId;
                         } else if (result.isDenied) {
                             // Handle denial
                         }

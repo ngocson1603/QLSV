@@ -1,13 +1,20 @@
 ﻿@model IEnumerable<QLSV.Models.KhoaHoc>
 @{
-    ViewData["Title"] = "Sale";
+    ViewData["Title"] = "Khoá học";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
     //int PageCurrent = ViewBag.CurrentPage;
     //int PageNext = PageCurrent + 1;
     QLSV.Models.KhoaHoc sale = new QLSV.Models.KhoaHoc();
 }
 
-
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Khoá học</a>
+        </nav>
+    </div>
+</div>
 <div class="page-header no-gutters">
     <div class="row align-items-md-center">
         <div class="col-md-6">
@@ -57,9 +64,13 @@
                                             <i class="anticon anticon-ellipsis"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="ViewProductSale" asp-route-id="@item.Id"><i class="anticon anticon-eye"><span class="m-l-10">View</span></i></a>
-                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="Edit" asp-route-id="@item.Id"><i class="anticon anticon-edit"><span class="m-l-10">Edit</span></i></a>
-                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="Delete" asp-route-id="@item.Id"><i class="anticon anticon-delete"><span class="m-l-10">Delete</span></i></a>
+                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="ViewProductSale" asp-route-id="@item.Id"><i class="anticon anticon-eye"><span class="m-l-10">Danh sách sinh viên</span></i></a>
+                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="Edit" asp-route-id="@item.Id"><i class="anticon anticon-edit"><span class="m-l-10">Điểm số</span></i></a>
+                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="ThongKe" asp-route-idKhoaHoc="@item.Id"><i class="anticon anticon-edit"><span class="m-l-10">Thống kê</span></i></a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <a class="dropdown-item btn" asp-area="Admin" asp-controller="AdminDiem" asp-action="Delete" asp-route-id="@item.Id"><i class="anticon anticon-delete"><span class="m-l-10">Delete</span></i></a>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -167,25 +178,25 @@
 </div>
 @section Scripts{
     <script>
-            $(document).ready(function () {
-                $("#keyworddotsale").keyup(function () {
-                    var strkeyword = $('#keyworddotsale').val();
-                    $.ajax({
-                        url: '/Admin/Search/FindDotSale/',
-                        datatype: "json",
-                        type: "POST",
-                        data: { keyword: strkeyword },
-                        async: true,
-                        success: function (results) {
-                            $("#records_tabledotsale").html("");
-                            $("#records_tabledotsale").html(results);
-                        },
-                        error: function (xhr) {
-                            alert('error');
-                        }
-                    });
-                });
-            });
+            //$(document).ready(function () {
+            //    $("#keyworddotsale").keyup(function () {
+            //        var strkeyword = $('#keyworddotsale').val();
+            //        $.ajax({
+            //            url: '/Admin/Search/FindDotSale/',
+            //            datatype: "json",
+            //            type: "POST",
+            //            data: { keyword: strkeyword },
+            //            async: true,
+            //            success: function (results) {
+            //                $("#records_tabledotsale").html("");
+            //                $("#records_tabledotsale").html(results);
+            //            },
+            //            error: function (xhr) {
+            //                alert('error');
+            //            }
+            //        });
+            //    });
+            //});
         </script>
 
 

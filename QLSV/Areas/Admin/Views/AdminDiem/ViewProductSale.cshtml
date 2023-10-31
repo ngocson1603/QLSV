@@ -3,7 +3,15 @@
     ViewData["Title"] = "Danh sách sale";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 
-}
+}<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Home</a>
+            <a asp-area="Admin" asp-controller="AdminDiem" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Khoá học</a>
+            <span class="breadcrumb-item">@ViewBag?.khoahoc?.course_name</span>
+        </nav>
+    </div>
+</div>
 <div class="page-header no-gutters">
     <div class="row align-items-md-center">
         <div class="col-md-6">
@@ -40,12 +48,18 @@
                                         <div class="avatar avatar-image" style="height: 100px; width: 100px;">
                                             <img src="~/Images" alt="">
                                         </div>
-                                        <h4 class="m-t-30">@item.HoTen</h4>
+                                        <p class="m-b-0">@item.Gmail</p>
+                                        <p class="m-b-0">@item.date_of_birth.ToString("yyyy-MM-dd")</p>
+                                        <p class="m-b-0">@item.Balance</p>
+                                        <h4 class="m-t-10">@item.HoTen</h4>
                                     </div>
-                                    <div class="text-center m-t-15">
-                                        <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminDiem" asp-action="Edits" asp-route-id="@item.Id"><i class="anticon anticon-edit"></i></a>
-                                        <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminDiem" asp-action="DeleteSeleProduct" asp-route-id="@item.Id"><i class="anticon anticon-delete"></i></a>
-                                    </div>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <div class="text-center m-t-15">
+                                            <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminDiem" asp-action="Edits" asp-route-id="@item.Id"><i class="anticon anticon-edit"></i></a>
+                                            <a class="btn btn-primary btn-tone m-r-5" asp-area="Admin" asp-controller="AdminDiem" asp-action="DeleteSeleProduct" asp-route-id="@item.Id"><i class="anticon anticon-delete"></i></a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>

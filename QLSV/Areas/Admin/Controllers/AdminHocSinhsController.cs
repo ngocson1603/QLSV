@@ -17,13 +17,14 @@ using QLSV.Extension;
 namespace QLSV.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Dev")]
     public class AdminHocSinhsController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly GameStoreDbContext _context;
         public INotyfService _notyfService { get; }
-        public AdminHocSinhsController(IUnitOfWork unitOfWork, INotyfService notyfService,GameStoreDbContext context)
+
+        public AdminHocSinhsController(IUnitOfWork unitOfWork, INotyfService notyfService, GameStoreDbContext context)
         {
             _unitOfWork = unitOfWork;
             _notyfService = notyfService;
@@ -34,6 +35,15 @@ namespace QLSV.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var collection = _context.HocSinhs.Select(t => t).ToList();
+            var role = HttpContext.Session.GetString("Role");
+            if (role == "Dev")
+            {
+                var taikhoanID = HttpContext.Session.GetString("AccountId");
+                var khachhang = _unitOfWork.GiaoVienRepository.GetById(int.Parse(taikhoanID));
+                collection = _context.DiemHocSinhs.Where(x => x.IdKhoaHoc == khachhang.IdKhoaHoc)
+                        .Include(x => x.HocSinh)
+                        .Select(x => x.HocSinh).ToList();
+            }
             return View(collection);
         }
 
@@ -83,7 +93,6 @@ namespace QLSV.Areas.Admin.Controllers
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
@@ -179,7 +188,6 @@ namespace QLSV.Areas.Admin.Controllers
             {
                 throw;
             }
-            
         }
 
         private bool HocSinhExists(int id)
