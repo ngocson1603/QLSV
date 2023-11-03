@@ -1,7 +1,7 @@
-﻿@model IEnumerable<QLSV.ModelViews.SaleModelView>
+﻿@model IEnumerable<QLSV.Models.HocSinh>
 
 @{
-    ViewData["Title"] = "Danh sách sản phẩm đang sale";
+    ViewData["Title"] = "Danh sách học sinh đã mua khóa học";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="page-header">
@@ -21,7 +21,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Ho Ten</th>
-                        <th>Product Name</th>
+                        <th>Balance</th>
                     </tr>
                 </thead>
                 <tbody id="records_table">
@@ -29,21 +29,17 @@
                     {
                         foreach (var item in Model)
                         {
-                            <tr>
-                                <td>
-                                    @item.Id
-                                </td>
-                                <td>
-                                    @item.SaleName
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img class="img-fluid rounded" src="~/Images/@Url.Content(item.Image)" style="max-width: 60px" alt="">
-                                        <h6 class="m-b-0 m-l-10">@item.ProductName</h6>
-                                    </div>
-                                </td>
-
-                            </tr>
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.HoTen
+                        </td>
+                        <td>
+                            @item.Balance
+                        </td>
+                    </tr>
                         }
                     }
 
@@ -52,8 +48,8 @@
             </table>
             <div aria-label="Page navigation example">
                 @*<ul class="pagination">
-                <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminProducts" asp-route-CatID="@ViewBag.CurrentCateID" asp-action="Index" />
-                </ul>*@
+                    <pager class="pager-container" list="@Model" asp-area="Admin" asp-controller="AdminProducts" asp-route-CatID="@ViewBag.CurrentCateID" asp-action="Index" />
+                    </ul>*@
             </div>
         </div>
     </div>

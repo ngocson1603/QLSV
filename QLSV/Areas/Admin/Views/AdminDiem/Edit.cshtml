@@ -21,7 +21,7 @@
             <table class="table table-hover e-commerce-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>HoTen</th>
                         <th>IdKhoaHoc</th>
                         <th>SoDiem</th>
                         <th>NhanXet</th>
@@ -34,10 +34,10 @@
                         {
                             <tr>
                                 <td>
-                                    @item.Id
+                                    @item.HoTen
                                 </td>
                                 <td>
-                                    @saleId
+                                    @ViewBag.TenKhoa
                                 </td>
                                 <td><input type="number" id="SoDiem-@item.Id" onchange="handleChange(this);" /></td>
                                 <td><input type="text" class="nhanxet-input" id="NhanXet-@item.Id" onchange="handleChange(this);" /></td>

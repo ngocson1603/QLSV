@@ -21,5 +21,6 @@ namespace QLSV.Models
         public List<Refund> Refunds { get; set; }
         public List<AddFundTransaction> AddFundTransactions { get; set; }
         public List<LichHoc> LichHocs { get; set; }
+        public List<File> Files { get; set; }
     }
 }

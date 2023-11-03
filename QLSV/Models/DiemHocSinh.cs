@@ -1,6 +1,6 @@
 ﻿namespace QLSV.Models
 {
-    public class DiemHocSinh:BaseEntity
+    public class DiemHocSinh
     {
         public int IdHocSinh { get; set; }
         public int IdKhoaHoc { get; set; }

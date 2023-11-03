@@ -48,7 +48,6 @@ namespace QLSV.Controllers
             var lsBaivietlienquan = _unitOfWork.BlogRepository
                 .GetAll()
                 .Where(x => x.Published == true && x.Id != id)
-                .Take(3)
                 .OrderByDescending(x => x.CreatedDate).ToList();
             ViewBag.Baivietlienquan = lsBaivietlienquan;
             return View(tindang);

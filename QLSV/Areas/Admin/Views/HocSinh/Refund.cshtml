@@ -58,7 +58,7 @@
                                             <i class="anticon anticon-ellipsis"></i>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item btn" asp-area="Admin" asp-controller="HocSinh" asp-action="Details" asp-route-id="@item.Id"><i class="anticon anticon-eye"><span class="m-l-10">Đăng ký</span></i></a>
+                                            <a class="dropdown-item btn"><i class="anticon anticon-eye removecart" data-mahh="@item.Id"><span class="m-l-10">Hủy</span></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                                 <i class="anticon anticon-ellipsis"></i>
                                             </a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item btn" asp-area="Admin" asp-controller="HocSinh" asp-action="Details" asp-route-id="@item.Id"><i class="anticon anticon-eye removecart" data-mahh="@item.Id"><span class="m-l-10">Đăng ký</span></i></a>
+                                                <a class="dropdown-item btn"><i class="anticon anticon-eye removecart" data-mahh="@item.Id"><span class="m-l-10">Hủy</span></i></a>
                                             </div>
                                         </div>
                                     </td>
@@ -169,7 +169,7 @@
             $(".removecart").click(function () {
                 var productid = $(this).attr("data-mahh");
                 $.ajax({
-                    url: "HocSinh/Refund",
+                    url: "Admin/HocSinh/Refund",
                     type: "POST",
                     data: {
                         productID: productid,

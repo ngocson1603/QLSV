@@ -4,6 +4,8 @@
     ViewData["Title"] = "Dashboard";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
     QLSV.ModelViews.ChangePasswordViewModel changePassword = new QLSV.ModelViews.ChangePasswordViewModel();
+    List<QLSV.Models.File> lst = ViewBag.file;
+    List<QLSV.Models.LichHoc> lich = ViewBag.lich;
 }
 <div class="page-header no-gutters has-tab">
     <h2 class="font-weight-normal">Setting</h2>
@@ -77,35 +79,26 @@
                             <hr>
                             <h5><a href="/diem.html">Xem điểm</a></h5>
                             <hr>
-                            <h5>Experices</h5>
+                            <h5>Lịch học</h5>
                             <div class="m-t-20">
-                                <div class="media m-b-30">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/others/adobe-thumb.png" alt="">
-                                    </div>
-                                    <div class="media-body m-l-20">
-                                        <h6 class="m-b-0">UI/UX Designer, Adobe Inc.</h6>
-                                        <span class="font-size-13 text-gray">Jul 2018</span>
-                                    </div>
-                                </div>
-                                <div class="media m-b-30">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/others/amazon-thumb.png" alt="">
-                                    </div>
-                                    <div class="media-body m-l-20">
-                                        <h6 class="m-b-0">Product GiaoVien, Amazon.com Inc.</h6>
-                                        <span class="font-size-13 text-gray">Jul-2017 - Jul 2018</span>
-                                    </div>
-                                </div>
-                                <div class="media m-b-30">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/others/nvidia-thumb.png" alt="">
-                                    </div>
-                                    <div class="media-body m-l-20">
-                                        <h6 class="m-b-0">Interface Designer, Nvidia Corporation</h6>
-                                        <span class="font-size-13 text-gray">Jul-2016 - Jul 2017</span>
-                                    </div>
-                                </div>
+                                    @if (lich != null)
+                                    {
+                                        foreach (var item in lich)
+                                        {
+                                            <div class="media m-b-30">
+                                                    <div class="avatar avatar-image">
+                                                        <img src="~/Adminassets/images/others/adobe-thumb.png" alt="">
+                                                    </div>
+                                                    <div class="media-body m-l-20">
+                                                        <h6 class="m-b-0">UI/UX Designer, Adobe Inc.</h6>
+                                                        <span class="font-size-13 text-gray">@item.thoiGian.ToString("dd/MM/yyyy")</span>
+                                                    </div>
+                                                </div>
+                                            @*<div class="event">
+                                                <div class="event-date">@item.thoiGian.ToString("dd/MM/yyyy")</div>
+                                            </div>*@
+                                        }
+                                    }
                             </div>
                             <hr>
                             <h5>Education</h5>
@@ -135,59 +128,25 @@
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5>Connected</h5>
-                            <div class="m-t-30">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/avatars/thumb-1.jpg" alt="">
+                            <h5>File</h5>
+                            @if (lst != null)
+                            {
+                                foreach (var item in lst)
+                                {
+                                    <div class="m-t-30">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-image">
+                                                <img src="~/Adminassets/images/avatars/thumb-1.jpg" alt="">
+                                            </div>
+                                            <div class="m-l-10">
+                                                <h5 class="m-b-0">
+                                                    <a href="" class="text-dark down" data-mahh="@item.name">@item.name</a>
+                                                </h5>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="m-l-10">
-                                        <h5 class="m-b-0">
-                                            <a href="" class="text-dark">Erin Gonzales</a>
-                                        </h5>
-                                        <span class="font-size-13 text-gray">UI/UX Designer</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-t-30">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/avatars/thumb-2.jpg" alt="">
-                                    </div>
-                                    <div class="m-l-10">
-                                        <h5 class="m-b-0">
-                                            <a href="" class="text-dark">Darryl Day</a>
-                                        </h5>
-                                        <span class="font-size-13 text-gray">Software Engineer</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-t-30">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/avatars/thumb-3.jpg" alt="">
-                                    </div>
-                                    <div class="m-l-10">
-                                        <h5 class="m-b-0">
-                                            <a href="" class="text-dark">Marshall Nichols</a>
-                                        </h5>
-                                        <span class="font-size-13 text-gray">Product Manager</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-t-30">
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar avatar-image">
-                                        <img src="~/Adminassets/images/avatars/thumb-6.jpg" alt="">
-                                    </div>
-                                    <div class="m-l-10">
-                                        <h5 class="m-b-0">
-                                            <a href="" class="text-dark">Riley Newman</a>
-                                        </h5>
-                                        <span class="font-size-13 text-gray">Data Analyst</span>
-                                    </div>
-                                </div>
-                            </div>
+                                }
+                            }
                         </div>
                     </div>
                     <div class="card">
@@ -319,7 +278,24 @@
 </div>
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(function () {
+            $(".down").click(function () {
+                var productid = $(this).attr("data-mahh");
+                var downloadLink = document.createElement("a");
 
+                downloadLink.href = "api/cart/DownloadFile?FileName=" + productid;
+                downloadLink.target = "_blank"; // Open in a new tab or window
+                downloadLink.download = productid; // Use the provided filename
+                downloadLink.style.display = "none"; // Hide the link
+
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+
+                document.body.removeChild(downloadLink);
+            });
+        });
+    </script>
     <script>
         $(document).ready(function () {
             $("#logout").click(function () {

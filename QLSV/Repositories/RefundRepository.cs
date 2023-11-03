@@ -43,7 +43,7 @@ WHERE [Order].DatePurchase >= DATEADD(day, -10, GETDATE()) and HocSinh.Id = @use
         }
         public List<RefundUser> GetRefundHocSinh()
         {
-            var query = @"select Id,UserID,Price from Refund where DATEDIFF(day,datecreate,getdate())=7 and Status=0";
+            var query = @"select Id,UserID,Price from Refund where Status=0";
             var result=Context.Database.GetDbConnection().Query<RefundUser>(query);
             return result.ToList();
         }

@@ -44,39 +44,60 @@ namespace QLSV.Areas.Admin.Controllers
                 _notyfService.Error("Error");
                 return RedirectToAction(nameof(Index));
             }
+        }
+        public ActionResult ViewProductSaleInDate()
+        {
+            try
+            {
+                var ls = _unitOfWork.HocSinhRepository.listhocsinhdamua().ToList();
+                return View(ls);
+            }
+            catch (Exception)
+            {
+                _notyfService.Error("Error");
+                return RedirectToAction(nameof(Index));
+            }
 
         }
         // POST: AdminProductsController/Edit/5
+        public ActionResult Edits(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var saleid = HttpContext.Session.GetInt32("SaleId");
+            var product = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t => t.IdHocSinh == id).FirstOrDefault();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edits(int id, DiemHocSinh saleModelView)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    var solan = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t=>t.IdHocSinh == saleModelView.IdHocSinh && t.IdKhoaHoc == saleModelView.IdKhoaHoc);
-                    DiemHocSinh sale = new DiemHocSinh()
-                    {
-                        IdHocSinh = id,
-                        IdKhoaHoc = saleModelView.IdKhoaHoc,
-                        SoDiem = saleModelView.SoDiem,
-                        NhanXet = saleModelView.NhanXet,
-                        SoLan = solan.Count()+1
-                    };
-                    _unitOfWork.DiemHocSinhRepository.Update(sale);
-                    _unitOfWork.SaveChange();
-                    _notyfService.Success("Update successful");
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception)
-                {
-
-                    _notyfService.Error("Error");
-                    return RedirectToAction(nameof(Index));
-                }
-
+                var solan = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t => t.IdHocSinh == saleModelView.IdHocSinh && t.IdKhoaHoc == saleModelView.IdKhoaHoc);
+                DiemHocSinh diem = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t => t.IdHocSinh == id && t.IdKhoaHoc == saleModelView.IdKhoaHoc).FirstOrDefault();
+                diem.SoDiem = saleModelView.SoDiem;
+                diem.NhanXet = saleModelView.NhanXet;
+                diem.SoLan = solan.Count() + 1;
+                _unitOfWork.DiemHocSinhRepository.Update(diem);
+                _unitOfWork.SaveChange();
+                _notyfService.Success("Update successful");
+                return RedirectToAction(nameof(Index));
             }
+            catch (Exception)
+            {
+                throw;
+                _notyfService.Error("Error");
+                return RedirectToAction(nameof(Index));
+            }
+
             return View(saleModelView);
         }
         public ActionResult DeleteSeleProduct(int id)
@@ -98,20 +119,22 @@ namespace QLSV.Areas.Admin.Controllers
         // GET: SaleController/Edit/5
         public ActionResult Edit(int id)
         {
-            var ls = _unitOfWork.HocSinhRepository.GetAll();
+            var ls = _unitOfWork.HocSinhRepository.listhocsinh(id).ToList();
+            var tenkhoa = _unitOfWork.KhoaHocRepository.GetById(id);
             ViewBag.SaleId = id.ToString();
+            ViewBag.TenKhoa = tenkhoa.course_name;
             return View(ls);
         }
 
         [HttpPost]
         [Route("/Sale/AjaxMethod", Name = "AjaxMethod")]
-        public JsonResult AjaxMethod(string saleId, string productId, string discount,string nhanxet)
+        public JsonResult AjaxMethod(string saleId, string productId, string discount, string nhanxet)
         {
             if (_unitOfWork.KhoaHocRepository.GetById(int.Parse(productId)) == null)
                 return null;
             try
             {
-               //var hocsinh = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t => t.IdHocSinh == int.Parse(saleId) && t.IdKhoaHoc == int.Parse(productId));
+                //var hocsinh = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t => t.IdHocSinh == int.Parse(saleId) && t.IdKhoaHoc == int.Parse(productId));
                 _unitOfWork.DiemHocSinhRepository.Create(new DiemHocSinh()
                 {
                     IdHocSinh = int.Parse(saleId),
@@ -132,7 +155,7 @@ namespace QLSV.Areas.Admin.Controllers
         [HttpPost]
         public void SaveSaleProduct(string saleId, string productId, string discount)
         {
-            
+
         }
 
         // POST: SaleController/Edit/5
@@ -160,7 +183,7 @@ namespace QLSV.Areas.Admin.Controllers
         {
             try
             {
-                var product = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t=>t.IdKhoaHoc == id).ToList();
+                var product = _unitOfWork.DiemHocSinhRepository.GetAll().Where(t => t.IdKhoaHoc == id).ToList();
                 foreach (var item in product)
                 {
                     _unitOfWork.DiemHocSinhRepository.Delete(item);
@@ -169,7 +192,7 @@ namespace QLSV.Areas.Admin.Controllers
 
                 deletesale(id);
                 _notyfService.Success("Delete successful");
-                
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception)

@@ -17,6 +17,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace QLSV
 {
@@ -41,6 +43,7 @@ namespace QLSV
             {
                 option.UseSqlServer(Configuration.GetConnectionString("conString"));
             });
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
             services.AddSession();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(p =>
@@ -108,7 +111,8 @@ namespace QLSV
             app.UseHangfireDashboard();
             app.UseAuthentication();
             app.UseAuthorization();
-            //RecurringJob.AddOrUpdate<IRefundService>("refund-user", i => i.refundtoallUser(), Cron.Daily); //*/ 10 * ****
+            BackgroundJob.Enqueue<IRefundService>(x => x.refundtoallUser());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

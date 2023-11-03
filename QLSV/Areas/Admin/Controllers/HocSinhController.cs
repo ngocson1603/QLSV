@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileProviders;
 
 namespace QLSV.Areas.Admin.Controllers
 {
@@ -23,14 +24,22 @@ namespace QLSV.Areas.Admin.Controllers
         public INotyfService _notyfService { get; }
         private readonly IUnitOfWork _unitOfWork;
         private readonly IService _service;
-
-        public HocSinhController(INotyfService notyfService, IUnitOfWork unitOfWork, IService service)
+        private readonly IFileProvider _fileProvider;
+        private readonly GameStoreDbContext _context;
+        public HocSinhController(INotyfService notyfService, IUnitOfWork unitOfWork, IService service, GameStoreDbContext context)
         {
             _notyfService = notyfService;
             _unitOfWork = unitOfWork;
             _service = service;
+            _context = context;
         }
-
+        [HttpGet]
+        [Route("api/cart/DownloadFile")]
+        public async Task<IActionResult> DownloadFile(string FileName)
+        {
+            var result = await _unitOfWork.HocSinhRepository.DownloadFile(FileName);
+            return File(result.Item1, result.Item2, result.Item3);
+        }
         [Route("tai-khoan-cua-toi.html", Name = "Dashboard")]
         public IActionResult Dashboard()
         {
@@ -40,15 +49,10 @@ namespace QLSV.Areas.Admin.Controllers
                 var khachhang = _unitOfWork.HocSinhRepository.GetAll().SingleOrDefault(x => x.Id == Convert.ToInt32(taikhoanID));
                 if (khachhang != null)
                 {
-                    //var lsDonHang = _context.Orders
-                    //    .Include(x => x.TransactStatus)
-                    //    .AsNoTracking()
-                    //    .Where(x => x.CustomerId == khachhang.CustomerId)
-                    //    .OrderByDescending(x => x.OrderDate)
-                    //    .ToList();
-                    //ViewBag.DonHang = lsDonHang;
-                    //ViewBag.NumberOfGames = _unitOfWork.DiemHocSinhRepository.getDiemHocSinh(khachhang.Id).Count();
-                    //ViewBag.NumberOfGamesRf = _unitOfWork.RefundRepository.listgameRefund(int.Parse(taikhoanID)).Count();
+                    var lsDonHang = _context.Files.Where(t => t.IdHocSinh == int.Parse(taikhoanID)).ToList();
+                    ViewBag.file = lsDonHang;
+                    var lslich = _context.LichHocs.Where(t => t.IdHocSinh == int.Parse(taikhoanID)).ToList();
+                    ViewBag.lich = lslich;
                     return View(khachhang);
                 }
             }
@@ -134,19 +138,20 @@ namespace QLSV.Areas.Admin.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
         [Authorize, HttpPost]
         public IActionResult Refund(int productID)
         {
             if (ModelState.IsValid)
             {
                 var taikhoanID = HttpContext.Session.GetString("CustomerId");
+                var ord = _unitOfWork.OrderDetailRepository.GetAll().Where(t => t.ProductID == productID).FirstOrDefault();
                 int userid = int.Parse(taikhoanID);
                 try
                 {
                     Refund refundrequest = _service.RefundService.refund(userid, productID);
                     _unitOfWork.RefundRepository.Create(refundrequest);
-                    _unitOfWork.SaveChange();   
+                    _unitOfWork.OrderDetailRepository.Delete(ord);
+                    _unitOfWork.SaveChange();
                     _notyfService.Success("Successfully");
                     return RedirectToAction(nameof(DiemHocSinh));
                 }

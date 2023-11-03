@@ -25,7 +25,7 @@
 <!--========================================================
                       NEWS
 =========================================================-->
-<section class="news-single pt60 pb50">
+<section class="news-single pt60 pb50" style="background: #d58b8b">
     <div class="container">
         <div class="row">
             <div class="col">
@@ -48,122 +48,45 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-               <p>
-                   @Html.Raw(Model.Contents)
-               </p>
+                <p>
+
+                </p>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 mt30 mb10">
-                <div class="curriculum-quote bxw"
-                     style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInUp;">
-                    <h3>
-                        Since 2000, we've been partnering with education leaders to <a href="#">
-                            increase equity and
-                            achievement
-                        </a> for all students.
-                    </h3>
-                    <a href="#" class="link2">Learn More About Experience Coaching <i class="ti-angle-right"></i></a>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <h2>Explore Special Education Programs</h2>
-                <p class="mtb30">
-                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of
-                    classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor
-                    at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a
-                    Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the
-                    undoubtable source.
-                </p>
-
-                <p>
-                    Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of
-                    Good and Evil) by Cicero, written
-                    in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first
-                    line of Lorem Ipsum, "Lorem ipsum
-                    dolor sit amet..", comes from a line in section 1.10.32.
+            <div>
+                <p style="color: rgb(0, 0, 0); "> 
+                    @Html.Raw(Model.Contents)
                 </p>
             </div>
             <div class="col-md-12 mt80 wow fadeInUp" data-wow-delay=".3s">
                 <h2>Related Articles</h2>
                 <div class="news-carousel owl-carousel owl-theme mt40">
-                    <div class="news-item bxw">
-                        <div class="news-item-img">
-                            <img src="~/assetions/img/news1.jpg" alt="">
-                            <i data-src="https://www.youtube.com/watch?v=9xwazD5SyVg" data-fancybox class="fas fa-play"></i>
-                        </div>
-                        <div class="news-item-content">
-                            <span>April 28, 2019</span>
-                            <a href="#">
-                                <h3>
-                                    Peer pressure changes how
-                                    teens tackle inequality
-                                </h3>
-                            </a>
-                            <hr>
-                            <p>
-                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
-                                industry's standard text.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="news-item bxw">
-                        <div class="news-item-img">
-                            <img src="~/assetions/img/news2.jpg" alt="">
-                        </div>
-                        <div class="news-item-content">
-                            <span>April 28, 2019</span>
-                            <a href="#">
-                                <h3>
-                                    New project digs deep into
-                                    publishing diversity
-                                </h3>
-                            </a>
-                            <hr>
-                            <p>
-                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
-                                industry's standard text.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="news-item bxw">
-                        <div class="news-item-img">
-                            <img src="~/assetions/img/news3.jpg" alt="">
-                        </div>
-                        <div class="news-item-content">
-                            <span>April 28, 2019</span>
-                            <a href="#">
-                                <h3>
-                                    New project digs deep into
-                                    publishing diversity
-                                </h3>
-                            </a>
-                            <hr>
-                            <p>
-                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
-                                industry's standard text.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="news-item bxw">
-                        <div class="news-item-img">
-                            <img src="~/assetions/img/news4.jpg" alt="">
-                        </div>
-                        <div class="news-item-content">
-                            <span>April 28, 2019</span>
-                            <a href="#">
-                                <h3>
-                                    New project digs deep into
-                                    publishing diversity
-                                </h3>
-                            </a>
-                            <hr>
-                            <p>
-                                Lorem Ipsum is simply dummy text of the print ing and typesetting in dustry. Lorem Ipsum has been the
-                                industry's standard text.
-                            </p>
-                        </div>
-                    </div>
+                    @if (Baivietlienquan != null && Baivietlienquan.Count() > 0)
+                    {
+                        foreach (var item in Baivietlienquan)
+                        {
+                            string _url = $"/tin-tuc/{item.Alias}-{item.Id}.html";
+                            <div class="news-item bxw">
+                                <div class="news-item-img">
+                                    <img src="~/Images/news/@Url.Content(item.Image)" alt="@item.Title">
+                                    <i data-src="https://www.youtube.com/watch?v=9xwazD5SyVg" data-fancybox class="fas fa-play"></i>
+                                </div>
+                                <div class="news-item-content">
+                                    <span>April 28, 2019</span>
+                                    <a href="@_url">
+                                        <h3>
+                                            @item.Title
+                                        </h3>
+                                    </a>
+                                    <hr>
+                                    <p>
+                                        @item.TContent
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </div>

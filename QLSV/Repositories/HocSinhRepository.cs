@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using QLSV.Helper;
+using Microsoft.AspNetCore.StaticFiles;
+using System.IO;
 
 namespace QLSV.Repositories
 {
@@ -17,7 +20,25 @@ namespace QLSV.Repositories
         {
 
         }
+        public async Task<(byte[], string, string)> DownloadFile(string FileName)
+        {
+            try
+            {
+                var _GetFilePath = Common.GetFilePath(FileName);
+                var provider = new FileExtensionContentTypeProvider();
+                if (!provider.TryGetContentType(_GetFilePath, out var _ContentType))
+                {
+                    _ContentType = "application/octet-stream";
+                }
+                var _ReadAllByteAsync = await System.IO.File.ReadAllBytesAsync(_GetFilePath);
+                return (_ReadAllByteAsync, _ContentType, Path.GetFileName(_GetFilePath));
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+        }
         public HocSinh FindByEmail(string email)
         {
             var query = @"select * from HocSinh where Gmail = @email";
@@ -36,10 +57,17 @@ namespace QLSV.Repositories
         public List<HocSinh> listhocsinh(int id)
         {
             var query = @"select HocSinh.* from HocSinh,KhoaHoc,DiemHocSinh 
-where HocSinh.Id = DiemHocSinh.IdHocSinh and DiemHocSinh.IdKhoaHoc = KhoaHoc.Id and KhoaHoc.Id = @id";
+where HocSinh.Id = DiemHocSinh.IdHocSinh and DiemHocSinh.IdKhoaHoc = KhoaHoc.Id and DiemHocSinh.NhanXet IS NULL and KhoaHoc.Id = @id";
             var parameter = new DynamicParameters();
             parameter.Add("id", id);
             var data = Context.Database.GetDbConnection().Query<HocSinh>(query, parameter);
+            return data.ToList();
+        }
+        public List<HocSinh> listhocsinhdamua()
+        {
+            var query = @"select distinct HocSinh.* from HocSinh,KhoaHoc,DiemHocSinh 
+where HocSinh.Id = DiemHocSinh.IdHocSinh and DiemHocSinh.IdKhoaHoc = KhoaHoc.Id";
+            var data = Context.Database.GetDbConnection().Query<HocSinh>(query);
             return data.ToList();
         }
         public void updateBalance(int userID,decimal price,int type)

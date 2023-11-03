@@ -14,5 +14,6 @@ namespace QLSV.Models
         public DateTime date_of_birth { get; set; }
         public KhoaHoc KhoaHoc { get; set; }
         public List<LichHoc> LichHocs { get; set; }
+        public List<File> Files { get; set; }
     }
 }

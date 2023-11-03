@@ -10,7 +10,7 @@ namespace QLSV.Configurations
         public void Configure(EntityTypeBuilder<DiemHocSinh> builder)
         {
             builder.ToTable(nameof(DiemHocSinh));
-            builder.HasKey(o => new { o.Id });
+            builder.HasKey(o => new { o.IdHocSinh,o.IdKhoaHoc });
             builder.HasOne(o => o.HocSinh).WithMany(y => y.DiemHocSinhs).HasForeignKey(x => x.IdHocSinh).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(o => o.KhoaHoc).WithMany(y => y.DiemHocSinhs).HasForeignKey(x => x.IdKhoaHoc).OnDelete(DeleteBehavior.Restrict);
         }

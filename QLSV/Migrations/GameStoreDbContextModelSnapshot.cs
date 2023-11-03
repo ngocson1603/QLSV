@@ -116,11 +116,6 @@ namespace QLSV.Migrations
 
             modelBuilder.Entity("QLSV.Models.DiemHocSinh", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("IdHocSinh")
                         .HasColumnType("int");
 
@@ -136,13 +131,36 @@ namespace QLSV.Migrations
                     b.Property<int?>("SoLan")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdHocSinh");
+                    b.HasKey("IdHocSinh", "IdKhoaHoc");
 
                     b.HasIndex("IdKhoaHoc");
 
                     b.ToTable("DiemHocSinh");
+                });
+
+            modelBuilder.Entity("QLSV.Models.File", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdGiaoVien")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdHocSinh")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdGiaoVien");
+
+                    b.HasIndex("IdHocSinh");
+
+                    b.ToTable("File");
                 });
 
             modelBuilder.Entity("QLSV.Models.Fund", b =>
@@ -263,6 +281,31 @@ namespace QLSV.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("KhoaHoc");
+                });
+
+            modelBuilder.Entity("QLSV.Models.LichHoc", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("IdGiaoVien")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdHocSinh")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("thoiGian")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdGiaoVien");
+
+                    b.HasIndex("IdHocSinh");
+
+                    b.ToTable("LichHoc");
                 });
 
             modelBuilder.Entity("QLSV.Models.Order", b =>
@@ -397,6 +440,25 @@ namespace QLSV.Migrations
                     b.Navigation("KhoaHoc");
                 });
 
+            modelBuilder.Entity("QLSV.Models.File", b =>
+                {
+                    b.HasOne("QLSV.Models.GiaoVien", "GiaoVien")
+                        .WithMany("Files")
+                        .HasForeignKey("IdGiaoVien")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QLSV.Models.HocSinh", "HocSinh")
+                        .WithMany("Files")
+                        .HasForeignKey("IdHocSinh")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GiaoVien");
+
+                    b.Navigation("HocSinh");
+                });
+
             modelBuilder.Entity("QLSV.Models.GiaoVien", b =>
                 {
                     b.HasOne("QLSV.Models.KhoaHoc", "KhoaHoc")
@@ -405,6 +467,25 @@ namespace QLSV.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("KhoaHoc");
+                });
+
+            modelBuilder.Entity("QLSV.Models.LichHoc", b =>
+                {
+                    b.HasOne("QLSV.Models.GiaoVien", "GiaoVien")
+                        .WithMany("LichHocs")
+                        .HasForeignKey("IdGiaoVien")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QLSV.Models.HocSinh", "HocSinh")
+                        .WithMany("LichHocs")
+                        .HasForeignKey("IdHocSinh")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GiaoVien");
+
+                    b.Navigation("HocSinh");
                 });
 
             modelBuilder.Entity("QLSV.Models.Order", b =>
@@ -474,11 +555,22 @@ namespace QLSV.Migrations
                     b.Navigation("AddFundTransactions");
                 });
 
+            modelBuilder.Entity("QLSV.Models.GiaoVien", b =>
+                {
+                    b.Navigation("Files");
+
+                    b.Navigation("LichHocs");
+                });
+
             modelBuilder.Entity("QLSV.Models.HocSinh", b =>
                 {
                     b.Navigation("AddFundTransactions");
 
                     b.Navigation("DiemHocSinhs");
+
+                    b.Navigation("Files");
+
+                    b.Navigation("LichHocs");
 
                     b.Navigation("Orders");
 

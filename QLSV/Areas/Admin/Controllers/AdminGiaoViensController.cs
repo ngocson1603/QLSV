@@ -61,6 +61,7 @@ namespace QLSV.Areas.Admin.Controllers
         // GET: Admin/AdminGiaoViens/Create
         public IActionResult Create()
         {
+            ViewData["khoahoc"] = new SelectList(_unitOfWork.KhoaHocRepository.GetAll(), "Id", "course_name");
             return View();
         }
 
@@ -104,6 +105,7 @@ namespace QLSV.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            ViewData["khoahoc"] = new SelectList(_unitOfWork.KhoaHocRepository.GetAll(), "Id", "course_name");
             return View(GiaoVien);
         }
 
